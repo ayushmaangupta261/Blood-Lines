@@ -3,6 +3,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import path from "path";
 import { createServer } from "http"; 
+import connectToDB from "./utils/database/db.js";
  
 // Get the root directory
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -30,8 +31,13 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+// health checkup route
+app.get("/health", (req, res) => {
+  res.send("Hello World!");
+});
+
 // Start the server and connect to the database
 server.listen(port, async () => {
-//   await connectToDB(); // Ensure database connection before starting
+  await connectToDB(); 
   console.log(`Server is running on port ${port}`);
 });
