@@ -10,31 +10,31 @@ export const signup = async (req, res) => {
             return res.status(400).json({ message: "All fields are required." });
         }
 
-        // ✅ Validate Aadhaar number
+        // Validate Aadhaar number
         if (!/^\d{12}$/.test(aadharNumber)) {
             return res.status(400).json({ message: "Aadhaar number must be exactly 12 digits." });
         }
 
-        // ✅ Validate mobile number
+        // Validate mobile number
         if (!/^[6-9]\d{9}$/.test(mobileNumber)) {
             return res.status(400).json({ message: "Please enter a valid 10-digit mobile number." });
         }
 
-        // ✅ Validate email format
+        // Validate email format
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             return res.status(400).json({ message: "Please enter a valid email address." });
         }
 
-        // ✅ Check if user already exists
+        // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User with this email already exists." });
         }
 
-        // ✅ Encrypt Aadhaar number
+        // Encrypt Aadhaar number
         const encryptedAadhaar = encryptAadhaar(aadharNumber);
 
-        // ✅ Create new user
+        // Create new user
         const user = new User({
             name,
             email,
@@ -43,22 +43,22 @@ export const signup = async (req, res) => {
             aadharNumber: JSON.stringify(encryptedAadhaar),
         });
 
-        // ✅ Generate JWT tokens
+        // Generate JWT tokens
         const tokens = user.generateTokens();
         await user.save();
 
-        // ✅ Prepare response
+        // Prepare response
         const userData = user.toObject();
         delete userData.password;
         delete userData.accessToken;
         delete userData.refreshToken;
 
-        // ✅ Mask Aadhaar for display
+        // Mask Aadhaar for display
         userData.aadharNumber = maskAadhaar(
             decryptAadhaar(JSON.parse(user.aadharNumber), 8)
         );
 
-        // ✅ Send tokens in cookies
+        // Send tokens in cookies
         res
             .cookie("accessToken", tokens.accessToken, {
                 httpOnly: true,
