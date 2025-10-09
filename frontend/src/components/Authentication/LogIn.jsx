@@ -1,5 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import toast, { Toaster } from 'react-hot-toast';
+import { login } from '../../services/operations/authApi.js';
+import { useDispatch } from 'react-redux';
 
 const LogIn = () => {
   const {
@@ -8,76 +11,73 @@ const LogIn = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log('Login Data:', data);
+  const dispatch = useDispatch()
+
+  const onSubmit = async (data) => {
+    const res = await dispatch(login(data));
+    return
   };
 
-  // Helper function for placeholders
-  const getPlaceholder = (field, defaultText) => {
-    return errors[field] ? errors[field].message : defaultText;
+  // Handle validation errors and show toast
+  const onError = (errors) => {
+    const firstError = Object.values(errors)[0]?.message;
+    if (firstError) toast.error(firstError);
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="w-full p-6 flex flex-col justify-center"
-    >
-      <h2 className="text-2xl font-bold mb-4 text-gray-800 text-start">
-        Welcome Back!
-      </h2>
+    <>
+      {/* Toast container */}
+      <Toaster position="top-right" reverseOrder={false} />
 
-      {/* Email */}
-      <div className="flex flex-col mb-3">
+      <form
+        onSubmit={handleSubmit(onSubmit, onError)}
+        className="w-full p-6 flex flex-col justify-center"
+      >
+        <h2 className="text-2xl font-bold mb-4 text-gray-800 text-start">
+          Welcome Back!
+        </h2>
+
+        {/* Email */}
         <input
           type="email"
           {...register('email', {
             required: 'Email is required',
             pattern: { value: /^\S+@\S+$/i, message: 'Invalid email address' },
           })}
-          className={`px-4 py-2 border rounded-lg outline-none transition ${
-            errors.email ? 'border-red-500 text-red-500' : 'focus:border-red-500'
-          }`}
-          placeholder={getPlaceholder('email', 'Email')}
+          className="px-4 py-2 border rounded-lg outline-none mb-3 focus:border-red-500 transition"
+          placeholder="Email"
         />
-      </div>
 
-      {/* Password */}
-      <div className="flex flex-col mb-3">
+        {/* Password */}
         <input
           type="password"
           {...register('password', {
             required: 'Password is required',
             minLength: { value: 6, message: 'Minimum 6 characters' },
           })}
-          className={`px-4 py-2 border rounded-lg outline-none transition ${
-            errors.password ? 'border-red-500 text-red-500' : 'focus:border-red-500'
-          }`}
-          placeholder={getPlaceholder('password', 'Password')}
+          className="px-4 py-2 border rounded-lg outline-none mb-3 focus:border-red-500 transition"
+          placeholder="Password"
         />
-      </div>
 
-      {/* Mobile Number */}
-      <div className="flex flex-col mb-4">
+        {/* Mobile Number */}
         <input
           type="tel"
           {...register('mobileNumber', {
             required: 'Mobile number is required',
             pattern: { value: /^[0-9]{10}$/, message: 'Enter 10 digit mobile number' },
           })}
-          className={`px-4 py-2 border rounded-lg outline-none transition ${
-            errors.mobileNumber ? 'border-red-500 text-red-500' : 'focus:border-red-500'
-          }`}
-          placeholder={getPlaceholder('mobileNumber', 'Mobile Number')}
+          className="px-4 py-2 border rounded-lg outline-none mb-4 focus:border-red-500 transition"
+          placeholder="Mobile Number"
         />
-      </div>
 
-      <button
-        type="submit"
-        className="w-full py-2 mt-3 rounded-lg bg-gradient-to-r from-red-600 to-rose-500 text-white font-semibold shadow-md hover:shadow-lg transition"
-      >
-        Log In
-      </button>
-    </form>
+        <button
+          type="submit"
+          className="w-full py-2 mt-3 rounded-lg bg-gradient-to-r from-red-600 to-rose-500 text-white font-semibold shadow-md hover:shadow-lg transition"
+        >
+          Log In
+        </button>
+      </form>
+    </>
   );
 };
 

@@ -1,17 +1,15 @@
-// src/components/Navigation/Navbar.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from "../../assets/Navigation/logo.png";
-import AuthPage from '../Authentication/Auth'; // import the modal
+import AuthPage from '../Authentication/Auth';
 
 const Navbar = () => {
   const [showAuth, setShowAuth] = useState(false);
 
   return (
     <>
-      <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] z-50">
-        <div className="backdrop-blur-xl bg-white/40 shadow-lg h-[3.5rem] rounded-full flex items-center justify-between px-6 transition-all duration-300">
-
+      <nav className="fixed  left-1/2 -translate-x-1/2 w-[90%] z-50 bottom-5 md:top-4 md:bottom-auto">
+        <div className="backdrop-blur-xl bg-white/40 shadow-lg h-[3.5rem] rounded-full flex items-center justify-between px-6 transition-all duration-300 border border-[#E6D8C3]">
           {/* Left: Logo + Brand Name */}
           <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition">
             <img src={logo} alt="logo" className="w-[2.2rem]" />
@@ -21,7 +19,7 @@ const Navbar = () => {
           </Link>
 
           {/* Center: Navigation Links */}
-          <div className="hidden md:flex items-center gap-8 font-semibold text-gray-700">
+          <div className="hidden sm:flex items-center gap-x-4 md:gap-8 font-semibold text-gray-700">
             <Link to="/" className="hover:text-red-600 transition">Home</Link>
             <Link to="/about" className="hover:text-red-600 transition">About</Link>
             <Link to="/donate" className="hover:text-red-600 transition">Donate</Link>

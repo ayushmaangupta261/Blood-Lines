@@ -28,10 +28,17 @@ export const signup = async (req, res) => {
         }
 
         // Check if user already exists
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({
+            $or: [
+                { email: email },
+                { mobileNumber: mobileNumber }
+            ]
+        });
+
         if (existingUser) {
-            return res.status(400).json({ message: "User with this email already exists." });
+            return res.status(400).json({ message: "User with this email or mobile number already exists." });
         }
+
 
         // Encrypt Aadhaar number
         const encryptedAadhaar = encryptAadhaar(aadharNumber);
@@ -83,7 +90,7 @@ export const signup = async (req, res) => {
     } catch (error) {
         console.error("Error during signup:", error);
         res.status(500).json(
-            { message: "Server error" }
+            { message: error.message || "server error" }
         );
     }
 };
