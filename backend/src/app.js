@@ -1,12 +1,17 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import multer from "multer";
+
+
+const upload = multer({ dest: "tmp_uploads/" });
 
 const app = express();
 
 
-app.use(express.json({ limit: "16kb" }));
-app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+app.use(express.json({ limit: "50mb" }));      // or higher depending on ZIP size
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+
 
 
 app.use(cookieParser());
@@ -22,7 +27,10 @@ app.use(
 
 
 import authRoutes from "./routes/authRoutes.js";
+import kycRoutes from "./routes/kycRoutes.js"
+
 app.use("/api/auth", authRoutes);
+app.use("/api/kyc", kycRoutes); 
 
 
 app.use((err, req, res, next) => {

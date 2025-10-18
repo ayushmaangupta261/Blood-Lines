@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import Home from './pages/Home.jsx'
+import Dashboard from './pages/Dashboard.jsx';
 
 const routes = createBrowserRouter([
   {
@@ -16,7 +17,10 @@ const routes = createBrowserRouter([
         index: true,
         element: <Home />
       },
-   ,
+      {
+        path: "dashboard",
+        element: <Dashboard />
+      }
     ]
   }
 ])
