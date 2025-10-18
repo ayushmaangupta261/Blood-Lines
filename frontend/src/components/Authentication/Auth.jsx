@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import leftSideImage from "../../assets/Authentication/auth-page-image.png";
 import cross from "../../assets/Authentication/cancel.png";
 import LogIn from './LogIn';
 import Signup from './SignUp';
+import { useSelector } from 'react-redux';
 
 const AuthPage = ({ onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
 
+  console.log("User printing");
+  
+  const user = useSelector((state) => state.auth)
+  console.log("User -> ", user);
+
+
   return (
     // Overlay
-      <div
+    <div
       className='fixed inset-0 flex items-center justify-center z-50 bg-black/40 backdrop-blur-sm p-4'
       onClick={onClose}
     >
@@ -43,11 +50,11 @@ const AuthPage = ({ onClose }) => {
         </div>
 
         {/* Right: Image section (hidden on smaller screens) */}
-        <div className='hidden md:block w-[50%] relative'>
+        <div className='hidden md:block w-[50%] h-full  relative'>
           <img
             src={leftSideImage}
             alt="auth illustration"
-            className='w-full h-full object-cover'
+            className='w-full h-full object-contain'
           />
         </div>
       </div>

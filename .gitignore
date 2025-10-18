@@ -12,3 +12,5 @@ yarn-error.log*
 
 # Optional: build output
 dist/
+
+Docs/
